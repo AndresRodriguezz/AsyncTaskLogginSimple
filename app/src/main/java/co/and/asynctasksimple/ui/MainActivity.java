@@ -1,11 +1,15 @@
-package co.and.asynctasksimple;
+package co.and.asynctasksimple.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import co.and.asynctasksimple.task.AsyncTaskUSer;
+import co.and.asynctasksimple.Comunication;
+import co.and.asynctasksimple.R;
+import co.and.asynctasksimple.User;
+import co.and.asynctasksimple.viewmodel.UserViewModel;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Trace;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +20,16 @@ public class MainActivity extends AppCompatActivity implements Comunication {
    public EditText etName,etPassword;
    public Button btOkay;
    public ProgressBar progressBar;
-    AsyncTaskUSer asyncTaskuser;
+
+   User user;
+   UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         etName = findViewById(R.id.etName);
         etPassword = findViewById(R.id.etPassword);
@@ -31,6 +39,14 @@ public class MainActivity extends AppCompatActivity implements Comunication {
         btOkay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                user = new User();
+                user.setName(etName.getText().toString());
+                user.setPassword(etPassword.getText().toString());
+
+                userViewModel.setName(user.getName());
+
+                Toast.makeText(MainActivity.this, "" + userViewModel.getName(), Toast.LENGTH_SHORT).show();
+
                 new AsyncTaskUSer(MainActivity.this).execute(etName.getText().toString(),
                         etPassword.getText().toString(),3000);
             }
@@ -51,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Comunication {
     @Override
     public void launchActivity(Class<?> kindActivity) {
         Intent mIntent = new Intent (this,kindActivity);
-        mIntent.putExtra("user",etName.getText().toString());
+        mIntent.putExtra("user",user.getName());
         startActivity(mIntent);
 
     }

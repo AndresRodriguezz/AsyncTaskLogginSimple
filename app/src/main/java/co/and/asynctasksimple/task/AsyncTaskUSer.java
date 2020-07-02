@@ -1,6 +1,9 @@
-package co.and.asynctasksimple;
+package co.and.asynctasksimple.task;
 
 import android.os.AsyncTask;
+
+import co.and.asynctasksimple.Comunication;
+import co.and.asynctasksimple.ui.ResultActivity;
 
 public class AsyncTaskUSer extends AsyncTask<Object,Void,Boolean> {
     Comunication comunication;
